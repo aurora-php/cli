@@ -1,0 +1,32 @@
+{
+    "name":         "octris/cli",
+    "type":         "library",
+    "description":  "Octris library for cli applications",
+    "keywords":     [],
+    "homepage":     "http://github.com/octris/cli/",
+    "license":      "BSD-3-Clause",
+
+    "authors":      [{
+        "name":         "Harald Lapp",
+        "email":        "harald@octris.org",
+        "homepage":     "http://www.octris.org/"
+    }],
+
+    "repositories": [
+        {
+            "url":  "https://github.com/aaparser/aaparser-php",
+            "type": "git"
+        }
+    ],
+
+    "require":      {
+        "php":                   ">=5.6.0",
+        "aaparser/aaparser-php": "dev-master"
+    },
+
+    "autoload":     {
+        "psr-4":        {
+            "Octris\\Cli\\": "libs/"
+        }
+    }
+}
