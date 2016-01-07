@@ -20,61 +20,49 @@ namespace Octris\Cli;
 class App extends \Aaparser\Args
 {
     /**
-     * Application name.
-     *
-     * @type    string
-     */
-    protected static $app_name = 'default';
-    /**/
-
-    /**
-     * Application version.
-     *
-     * @type    string
-     */
-    protected static $app_version = '0.0.0';
-    /**/
-
-    /**
-     * Application version date.
-     *
-     * @type    string
-     */
-    protected static $app_version_date = '0000-00-00';
-    /**/
-
-    /**
      * Constructor.
+     *
+     * @param   string          $name           Name of application.
+     * @param   array           $settings       Optional settings.
      */
-    public function __construct()
+    public function __construct($name, array $settings = array())
     {
-        parent::__construct(
-            self::$app_name,
-            [
-                'version' => static::$app_version,
-                'version_date' => static::$app_version_date
-            ]
-        );
+        parent::__construct($name, $settings);
     }
 
     /**
-     * App initialization, load command plugins.
+     * Import and add a command from a php script.
+     *
+     * @param   string      $name           Name of command to import.
+     * @param   string      $class          Name of class to import command from, must implent App\ICommand.
+     * @return  \Aaparser\Command           Instance of new object.
+     */
+    public function importCommand($name, $class, array $settings = array())
+    {
+        if (!is_subclass_of($class, '\Octris\Cli\App\ICommand')) {
+            throw new \InvalidArgumentException('Class is not a valid command.');
+        }
+        
+        $cmd = $this->addCommand($name);
+        $cmd->setAction(function(array $options, array $operands) use ($class) {
+            $instance = new $class();
+            $instance->run($options, $operands);
+        });
+        
+        $class::configure($cmd);
+        
+        return $cmd;
+    }
+
+    /**
+     * App initialization, set default action.
      */
     protected function initialize()
     {
-        $iterator = new \FilesystemIterator(OCTRIS_APP_BASE . '/libs/App/');
-        $filter = new \CallbackFilterIterator($iterator, function($cur, $key, $iter) {
-            return ($cur->isFile() && strtolower($cur->getExtension() == 'php'));
+        // Set default action
+        $this->setDefaultAction(function() {
+            $this->printHelp();
         });
-        
-        $ns = __NAMESPACE__ . '\\App\\';
-        
-        foreach($filter as $file) {
-            $class = $ns . basename($file->getFilename(), '.php');
-            // $instance = new $class::
-            
-            print $class . "\n";
-        }        
     }
 
     /**
@@ -83,5 +71,6 @@ class App extends \Aaparser\Args
     final public function run()
     {
         $this->initialize();
+        $this->parse();
     }
 }
