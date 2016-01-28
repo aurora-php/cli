@@ -41,7 +41,7 @@ class App extends \Aaparser\Args
     public function importCommand($name, $class, array $settings = array(), callable $default_command = null)
     {
         if (!is_subclass_of($class, '\Octris\Cli\App\ICommand')) {
-            throw new \InvalidArgumentException('Class is not a valid command.');
+            throw new \InvalidArgumentException('Class is not a valid command "' . (is_object($class) ? get_class($class) : $class) . '".');
         }
 
         $cmd = $this->addCommand($name);
