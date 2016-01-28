@@ -17,7 +17,7 @@ namespace Octris\Cli;
  * @copyright   copyright (c) 2016 by Harald Lapp
  * @author      Harald Lapp <harald@octris.org>
  */
-class App extends \Aaparser\Args
+class App extends \Octris\Cli\App\Command
 {
     /**
      * Constructor.
@@ -27,40 +27,21 @@ class App extends \Aaparser\Args
      */
     public function __construct($name, array $settings = array())
     {
-        parent::__construct($name, $settings);
+        $this->command = new \Aaparser\Args($name, $settings);
     }
 
     /**
-     * Import and add a command from a php script.
+     * Print help.
      *
-     * @param   string      $name               Name of command to import.
-     * @param   string      $class              Name of class to import command from, must implent App\ICommand.
-     * @param   callable    $default_command    Optional default command (default: help).
-     * @return  \Aaparser\Command               Instance of new object.
+     * @param   \Octris\Cli\App\Command     $command        Optional command to print help for.
      */
-    public function importCommand($name, $class, array $settings = array(), callable $default_command = null)
+    public function printHelp(\Octris\Cli\App\Command $command = null)
     {
-        if (!is_subclass_of($class, '\Octris\Cli\App\ICommand')) {
-            throw new \InvalidArgumentException('Class is not a valid command "' . (is_object($class) ? get_class($class) : $class) . '".');
+        if (is_null($command)) {
+            $command = $this;
         }
 
-        $cmd = $this->addCommand($name);
-        $cmd->setAction(function(array $options, array $operands) use ($class) {
-            $instance = new $class();
-            $instance->run($options, $operands);
-        });
-
-        if (is_null($default_command)) {
-            $default_command = function() use ($cmd) {
-                $this->printHelp($cmd);
-            };
-        }
-
-        $cmd->setDefaultAction($default_command);
-
-        $class::configure($cmd);
-
-        return $cmd;
+        parent::printHelp($command->command);
     }
 
     /**
