@@ -27,7 +27,7 @@ class App extends \Octris\Cli\App\Command
      */
     public function __construct($name, array $settings = array())
     {
-        $this->command = new \Aaparser\Args($name, $settings);
+        parent::__construct($this, new \Aaparser\Args($name, $settings));
     }
 
     /**

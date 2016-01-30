@@ -20,6 +20,13 @@ namespace Octris\Cli\App;
 class Command
 {
     /**
+     * Instance of application the command belongs to.
+     *
+     * @type    \Octris\Cli\App
+     */
+    protected $app;
+
+    /**
      * Command instance.
      *
      * @type    \Aaparser\Command
@@ -29,10 +36,12 @@ class Command
     /**
      * Constructor.
      *
+     * @param   \Octris\Cli\App         $app                Instance of application the command belongs to.
      * @param   \Aaparser\Command       $command            Instance of a command.
      */
-    public function __construct(\Aaparser\Command $command)
+    public function __construct(\Octris\Cli\App $app, \Aaparser\Command $command)
     {
+        $this->app = $app;
         $this->command = $command;
     }
 
@@ -45,7 +54,7 @@ class Command
      */
     public function addCommand($name, array $settings = array())
     {
-        $instance = new Command($this->command->addCommand($name, $settings));
+        $instance = new Command($this->app, $this->command->addCommand($name, $settings));
 
         return $instance;
     }
@@ -72,7 +81,7 @@ class Command
 
         if (is_null($default_command)) {
             $default_command = function() use ($cmd) {
-                $this->printHelp($cmd);
+                $this->app->printHelp($cmd);
             };
         }
 
