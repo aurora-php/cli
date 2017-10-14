@@ -22,7 +22,15 @@ interface ICommand
     /**
      * Configure the command.
      *
-     * @param   \Octris\Cli\App\Command       $command            Instance of an aaparser command to configure.
+     * @param   \Octris\Cli\App\Command         $command            Instance of an aaparser command to configure.
      */
     public static function configure(\Octris\Cli\App\Command $command);
+
+    /**
+     * Run command.
+     *
+     * @param   array                           $options            Cli options.
+     * @param   array                           $operands           Cli operands.
+     */
+    public function run(array $options, array $operands);
 }
