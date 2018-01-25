@@ -63,14 +63,14 @@ class Command
      * Import and add a command from a php script.
      *
      * @param   string      $name               Name of command to import.
-     * @param   string      $class              Name of class to import command from, must implent App\ICommand.
+     * @param   string      $class              Name of class to import command from, must implent \Octris\App\CommandInterface.
      * @param   array       $inject             Arguments to inject into command instance.
      * @param   callable    $default_command    Optional default command (default: help).
      * @return  \Aaparser\Command               Instance of new object.
      */
     public function importCommand($name, $class, array $inject = [], callable $default_command = null)
     {
-        if (!is_subclass_of($class, '\Octris\Cli\App\ICommand')) {
+        if (!is_subclass_of($class, '\Octris\Cli\App\CommandInterface')) {
             throw new \InvalidArgumentException('Class is not a valid command "' . $class . '".');
         }
 
