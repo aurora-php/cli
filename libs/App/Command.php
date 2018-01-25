@@ -64,18 +64,19 @@ class Command
      *
      * @param   string      $name               Name of command to import.
      * @param   string      $class              Name of class to import command from, must implent App\ICommand.
+     * @param   array       $inject             Arguments to inject into command instance.
      * @param   callable    $default_command    Optional default command (default: help).
      * @return  \Aaparser\Command               Instance of new object.
      */
-    public function importCommand($name, $class, array $settings = array(), callable $default_command = null)
+    public function importCommand($name, $class, array $inject = [], callable $default_command = null)
     {
         if (!is_subclass_of($class, '\Octris\Cli\App\ICommand')) {
-            throw new \InvalidArgumentException('Class is not a valid command "' . (is_object($class) ? get_class($class) : $class) . '".');
+            throw new \InvalidArgumentException('Class is not a valid command "' . $class . '".');
         }
 
         $cmd = $this->addCommand($name);
-        $cmd->setAction(function(array $options, array $operands) use ($class) {
-            $instance = new $class();
+        $cmd->setAction(function(array $options, array $operands) use ($class, $inject) {
+            $instance = new $class(...$inject);
             $instance->run($options, $operands);
         });
 
