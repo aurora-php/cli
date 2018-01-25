@@ -25,7 +25,7 @@ class App extends \Octris\Cli\App\Command
      * @param   string          $name           Name of application.
      * @param   array           $settings       Optional settings.
      */
-    public function __construct($name, array $settings = array())
+    public function __construct($name, array $settings = [])
     {
         parent::__construct($this, new \Aaparser\Args($name, $settings));
     }

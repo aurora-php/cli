@@ -52,7 +52,7 @@ class Command
      * @param   array       $settings       Optional additional settings.
      * @return  \Octris\Cli\App\Command     Instance of new command.
      */
-    public function addCommand($name, array $settings = array())
+    public function addCommand($name, array $settings = [])
     {
         $instance = new Command($this->app, $this->command->addCommand($name, $settings));
 
