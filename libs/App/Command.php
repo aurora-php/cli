@@ -77,7 +77,7 @@ class Command
         $cmd = $this->addCommand($name);
         $cmd->setAction(function(array $options, array $operands) use ($class, $inject) {
             $instance = new $class(...$inject);
-            $instance->run($options, $operands);
+            $instance->run($options, $operands, new Output());
         });
 
         if (is_null($default_command)) {

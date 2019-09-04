@@ -31,6 +31,7 @@ interface CommandInterface
      *
      * @param   array                           $options            Cli options.
      * @param   array                           $operands           Cli operands.
+     * @param   \Octris\Cli\App\Output          $output             Instance of output class.
      */
-    public function run(array $options, array $operands);
+    public function run(array $options, array $operands, \Octris\Cli\App\Output $output);
 }
